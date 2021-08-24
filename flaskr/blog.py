@@ -26,19 +26,19 @@ def create():
         body = request.form['body']
         error = None
 
-    if not title:
-        error = 'Title is required'
+        if not title:
+            error = 'Title is required'
 
-    if error is not None:
-        flash(error)
-    else:
-        database = get_db()
-        database.execute(
-            'insert into post(title, body, author_id) values (?,?,?)',
-            (title, body, g.user['id'])
-        )
-        database.commit()
-        return redirect(url_for('blog.index'))
+        if error is not None:
+            flash(error)
+        else:
+            database = get_db()
+            database.execute(
+                'insert into post(title, body, author_id) values (?,?,?)',
+                (title, body, g.user['id'])
+            )
+            database.commit()
+            return redirect(url_for('blog.index'))
     return render_template('blog/create.html')
 
 
@@ -77,16 +77,16 @@ def update(id):
             database.commit()
             return redirect(url_for('blog.index'))
 
-        return render_template('blog/update.html', post=post)
+    return render_template('blog/update.html', post=post)
 
 
-@bp.route('/<int:id>/delete', methods=('POST', ))
+@bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
     get_post(id)
     database = get_db()
     database.execute(
-        'delete from post where id=?', (id, )
+        'delete from post where id=?', (id,)
     )
     database.commit()
     return redirect(url_for('blog.index'))
